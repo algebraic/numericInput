@@ -1,12 +1,3 @@
-/////////////////////////////////////////////////////////////////////
-// jQuery Numeric Input plugin, Zach Johnson
-// ******************************************************************
-// Constrains input fields to only numeric values
-// Specifies maximum field length with two decimal places
-// usage: $("#somefield").numeric(5,2)
-// - allows five digits to the left of decimal and two to the right
-// ******************************************************************
-
 (function( $ ){
 
   $.fn.numeric = function(intLength, decimalLength) {  
