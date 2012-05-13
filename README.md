@@ -30,9 +30,16 @@ Great for currency --<br>
     $(':text').numeric(5,2);
 </code>
 
- -- has the effect of limiting a field to a maximum value of 99999.99.
+ -- has the effect of limiting fields to a maximum value of 99999.99.
 <hr>
 
+To do:
+============
+<hr>
+-allow negative values<br>
+-allow a leading zero for decimal values when intLength is zero<br>
+-fix ctrl+a select all (shift+home/end does work though)<br>
+<hr>
 
-
+<br>
 My first attempt at a jQuery plugin - please be kind.  ;)
