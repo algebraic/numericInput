@@ -8,6 +8,9 @@
 // - allows 99 digits to either side of a single allowed decimal
 // usage: $("#somefield").numeric(3)
 // - allows 3 digits and no decimal
+//
+// update 10/21/14 - allowing up/down arrows & page up/down keys
+//
 // ******************************************************************
 
 (function( $ ){
@@ -36,9 +39,9 @@
 		$this.keydown(function(event) {
 
 			checkDecimal();
-			
-			// allow only numbers and the following keys: tab, enter, backspace, delete, period(.), left/right arrows, home/end
-			if ((event.keyCode > 34 && event.keyCode < 40) || (event.keyCode == 9) || (!event.shiftKey && ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 110 || event.keyCode == 190 ))) {
+
+			// allow only numbers and the following keys: tab, enter, backspace, delete, period(.), arrows, home/end, page up/down
+			if ((event.keyCode > 32 && event.keyCode < 41) || (event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 116) || (!event.shiftKey && ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 110 || event.keyCode == 190 )) || (event.altKey && event.keyCode == 68)) {
 				// if period key pressed - check if period is present and don't allow if it is
 				if (event.keyCode == 110 || event.keyCode == 190) {
 					checkDecimal();
@@ -46,13 +49,13 @@
 						event.preventDefault();
 					}
 				}
-			}
-			else {
+			} else {
 				// Ensure that it is a number and stop the keypress
 				if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
-					event.preventDefault(); 
+					event.preventDefault();
 				}
 			}
+			
 			// period insert, only on period or a number key
 			value = $this.val();
 			if ((event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106) || event.keyCode == 110 || event.keyCode == 190) {
