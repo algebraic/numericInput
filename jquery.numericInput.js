@@ -3,7 +3,7 @@
 // ******************************************************************
 // Constrains input fields to only numeric values
 // 
-//	usage: $("#somefield").numeric(5,2)
+// usage: $("#somefield").numeric(5,2)
 // - allows five digits to the left of decimal and two to the right
 // usage: $("#somefield").numeric()
 // - allows 99 digits to either side of a single allowed decimal
@@ -16,9 +16,11 @@
 // updated 02/06/15 - allowing negative values
 // ******************************************************************
 // todo
-// check position and allow entering of additional digits if length rules allow
+// -check position and allow entering of additional digits if length rules allow
 // 		i.e if "55.55" is entered but field was set for .numeric(5,2) allow entering of 
 //		three additional integer digits
+// -allow a leading zero for decimal values when intLength is zero<br>
+// -allow ctrl+a select all (shift+home/end does work though)<br>
 
 
 (function( $ ){
@@ -56,20 +58,16 @@
 				if (event.keyCode == 109 || event.keyCode == 189) {
 					if (value.indexOf('-') == 0) {
 						// - already exists, prevent
-						debug.info("- already exists, prevent");
 						event.preventDefault();
 					} else {
 						// prevent unless minus hit at beginning of field, check caret position
-						debug.info("check caret position");
 						var input = $this.get(0);
 						if ('selectionStart' in input) {
 							if (input.selectionStart != 0) {
 								// not at beginning, prevent
-								debug.info("not at beginning, prevent");
 								event.preventDefault();
 							} else {
 								// allow minus, increase maxlength by 1 to accommodate
-								debug.info("allow minus, increase maxlength by 1 to accommodate");
 								var max = $this.attr("maxlength");
 								$this.attr("maxlength", max+1);
 								return;
