@@ -15,6 +15,11 @@
 // updated 10/21/14 - allowing up/down arrows & page up/down keys
 // updated 02/06/15 - allowing negative values
 // ******************************************************************
+// todo
+// check position and allow entering of additional digits if length rules allow
+// 		i.e if "55.55" is entered but field was set for .numeric(5,2) allow entering of 
+//		three additional integer digits
+
 
 (function( $ ){
 
@@ -31,6 +36,7 @@
 
 		var $this = $(this);
 		var decimalUsed;
+		var negative = 0;
 		var value = $this.val();
 		
 		$this.keydown(function(event) {
@@ -48,8 +54,27 @@
 				}
 				// if minus key pressed - disallow if value length > 0
 				if (event.keyCode == 109 || event.keyCode == 189) {
-					if (value.length > 0) {
+					if (value.indexOf('-') == 0) {
+						// - already exists, prevent
+						debug.info("- already exists, prevent");
 						event.preventDefault();
+					} else {
+						// prevent unless minus hit at beginning of field, check caret position
+						debug.info("check caret position");
+						var input = $this.get(0);
+						if ('selectionStart' in input) {
+							if (input.selectionStart != 0) {
+								// not at beginning, prevent
+								debug.info("not at beginning, prevent");
+								event.preventDefault();
+							} else {
+								// allow minus, increase maxlength by 1 to accommodate
+								debug.info("allow minus, increase maxlength by 1 to accommodate");
+								var max = $this.attr("maxlength");
+								$this.attr("maxlength", max+1);
+								return;
+							}
+						}
 					}
 				}
 			} else {
@@ -62,43 +87,45 @@
 			// period insert, only on period or a number key
 			value = $this.val();
 			if ((event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106) || event.keyCode == 110 || event.keyCode == 190) {
-				if (value.indexOf('.') == -1 && value.length >= intLength && decimalLength != 0) {
-						value = value + ".";
-						$(this).val(value);
+				if (value.indexOf('.') == -1 && value.length >= (intLength+negative) && decimalLength != 0) {
+					value = value + ".";
+					$(this).val(value);
 				} 
 			}
 		
 			checkDecimal();
 		});
 
-//
-		
 		$this.keyup(function(event) {
 			value = $this.val();
-			if (value.indexOf('.') == -1 && value.length > intLength) {
-				$(this).val(value.substr(0,value.length - (value.length-intLength)));
+			if (value.indexOf('.') == -1 && value.length > (intLength+negative)) {
+				$(this).val(value.substr(0,value.length - (value.length-intLength-negative)));
 			}
 		});
 	  
-//
-
 		function checkDecimal() {
 			value = $this.val();
 			
+			// check for minus sign
+			if (value.indexOf('-') == 0) {
+				negative = 1;
+			} else {
+				negative = 0;
+			}
+			
 			// check for decimal
 			if (value.indexOf('.') == -1) {
-					decimalUsed = false;
-					$this.attr('maxlength', intLength);
+				decimalUsed = false;
+				$this.attr('maxlength', intLength+negative);
+			} else {
+				decimalUsed = true;
+				if (value.indexOf('.') + decimalLength <= intLength+negative+decimalLength) {
+					$this.attr('maxlength', value.indexOf('.') + decimalLength + 1);
 				} else {
-					decimalUsed = true;
-					if (value.indexOf('.') + decimalLength <= intLength+decimalLength) {
-						$this.attr('maxlength', value.indexOf('.') + decimalLength + 1);
-					} else {
-						$this.attr('maxlength', intLength + decimalLength + 1);
-					}
+					$this.attr('maxlength', intLength+negative + decimalLength + 1);
+				}
 			}
 		}
-//
     });
 
   };
