@@ -5,7 +5,7 @@ A simple jQuery plugin to constrain inputs to numeric-only - including a single 
 
 Optionally set limits for number of characters to both right and left of decimal.
 
-Demo at http://jsfiddle.net/hSHsh/.
+Demo at http://jsfiddle.net/zjohnson/WDVtv/.
 <hr>
 
 Usage
@@ -44,7 +44,3 @@ To do:
 -check position and allow entering of additional digits if length rules allow
 	i.e if "55.55" is entered but field was set for .numeric(5,2) allow entering of 
 	three additional integer digits
-<hr>
-
-<br>
-My first attempt at a jQuery plugin - please be kind.  ;)
