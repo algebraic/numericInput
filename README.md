@@ -10,9 +10,10 @@ Demo at http://jsfiddle.net/hSHsh/.
 
 Usage
 ============
-    $("#noParams").numeric();       //numbers only & one period allowed
-    $("#singleParam").numeric(5);   //5 number places allowed and NO decimal
-    $("#fullParams").numeric(4,2);  //4 whole number places and two decimal places allowed (like currency)
+    $("#noParams").numeric();			// numbers only & one period allowed
+    $("#singleParam").numeric(5);		// 5 number places allowed and NO decimal
+    $("#fullParams").numeric(4,2);		// 4 whole number places and 2 decimal places allowed (like currency)
+	$("#negative").numeric(5,2,true);	// 5 whole number, 2 decimal, and allowing negative values (minus sign at beginning) 
 
 What it Does
 ============
@@ -25,6 +26,8 @@ A <b>single parameter</b> sets integer length and says <b>NO DECIMALS!</b> Decim
 
 With <b>two parameters</b>, you specify whole number length (first number) and number of decimal places (second number). A value of zero for either completely disallows numbers on that side of the decimal. 
 
+With the optional third boolean parameter set to true, you may add a minus sign (-) at the beginning of the value.
+
 Great for currency --<br>
 <code>
     $(':text').numeric(5,2);
@@ -36,9 +39,11 @@ Great for currency --<br>
 To do:
 ============
 <hr>
--allow negative values<br>
 -allow a leading zero for decimal values when intLength is zero<br>
--fix ctrl+a select all (shift+home/end does work though)<br>
+-allow ctrl+a select all (shift+home/end does work though)<br>
+-check position and allow entering of additional digits if length rules allow
+	i.e if "55.55" is entered but field was set for .numeric(5,2) allow entering of 
+	three additional integer digits
 <hr>
 
 <br>
