@@ -25,7 +25,7 @@
 
 (function( $ ){
 
-  $.fn.numeric = function(intLength, decimalLength, negative) {  
+  $.fn.numeric = function(intLength, decimalLength, negativeEnabled) {  
 	// if no parameters passed, set int & decimal length to 99 (default values)
 	if (intLength == null && decimalLength == null) {
 		intLength = 99;
@@ -40,8 +40,9 @@
 		var decimalUsed;
 		var negative = 0;
 		var value = $this.val();
+		debug.info("numeric:: negativeEnabled=" + negativeEnabled);
 		
-		$this.keydown(function(event) {
+		$this.unbind("keydown").keydown(function(event) {
 
 			checkDecimal();
 
@@ -56,8 +57,9 @@
 				}
 				// if minus key pressed - disallow if value length > 0
 				if (event.keyCode == 109 || event.keyCode == 189) {
-					if (value.indexOf('-') == 0) {
-						// - already exists, prevent
+					debug.info("- pressed");
+					if (!negativeEnabled || value.indexOf('-') == 0) {
+						// - already exists or negative not enabled, prevent
 						event.preventDefault();
 					} else {
 						// prevent unless minus hit at beginning of field, check caret position
@@ -104,11 +106,13 @@
 		function checkDecimal() {
 			value = $this.val();
 			
-			// check for minus sign
-			if (value.indexOf('-') == 0) {
-				negative = 1;
-			} else {
-				negative = 0;
+			if (negativeEnabled) {
+				// check for minus sign
+				if (value.indexOf('-') == 0) {
+					negative = 1;
+				} else {
+					negative = 0;
+				}
 			}
 			
 			// check for decimal
