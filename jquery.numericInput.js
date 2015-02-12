@@ -40,7 +40,6 @@
 		var decimalUsed;
 		var negative = 0;
 		var value = $this.val();
-		debug.info("numeric:: negativeEnabled=" + negativeEnabled);
 		
 		$this.unbind("keydown").keydown(function(event) {
 
@@ -57,7 +56,6 @@
 				}
 				// if minus key pressed - disallow if value length > 0
 				if (event.keyCode == 109 || event.keyCode == 189) {
-					debug.info("- pressed");
 					if (!negativeEnabled || value.indexOf('-') == 0) {
 						// - already exists or negative not enabled, prevent
 						event.preventDefault();
