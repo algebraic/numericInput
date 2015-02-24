@@ -14,6 +14,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // updated 10/21/14 - allowing up/down arrows & page up/down keys
 // updated 02/06/15 - allowing negative values
+// updated 02/24/15 - added support for <input type="number">
 // ******************************************************************
 // todo
 // -check position and allow entering of additional digits if length rules allow
@@ -42,56 +43,61 @@
 		var value = $this.val();
 		
 		$this.unbind("keydown").keydown(function(event) {
-
-			checkDecimal();
-
-			// allow only numbers and the following keys: tab, enter, backspace, delete, period(.), arrows, home/end, page up/down, minus (if negative=true)
-			if ((event.keyCode > 32 && event.keyCode < 41) || (event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 116) || (!event.shiftKey && ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 110 || event.keyCode == 190 )) || (event.altKey && event.keyCode == 68) || (event.keyCode == 109 || event.keyCode == 189)) {
-				// if period key pressed - check if period is present and don't allow if it is
-				if (event.keyCode == 110 || event.keyCode == 190) {
-					checkDecimal();
-					if ((decimalUsed || decimalLength == 0) || value.length == intLength) {
-						event.preventDefault();
+				checkDecimal();
+				
+				// allow only numbers and the following keys: tab, enter, backspace, delete, period(.), arrows, home/end, page up/down, minus (if negative=true)
+				if ((event.keyCode > 32 && event.keyCode < 41) || (event.keyCode == 9 || event.keyCode == 13 || event.keyCode == 116) || (!event.shiftKey && ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 110 || event.keyCode == 190 )) || (event.altKey && event.keyCode == 68) || (event.keyCode == 109 || event.keyCode == 189)) {
+					// if period key pressed - check if period is present and don't allow if it is
+					if (event.keyCode == 110 || event.keyCode == 190) {
+						checkDecimal();
+						if ((decimalUsed || decimalLength == 0) || value.length == intLength) {
+							event.preventDefault();
+						}
 					}
-				}
-				// if minus key pressed - disallow if value length > 0
-				if (event.keyCode == 109 || event.keyCode == 189) {
-					if (!negativeEnabled || value.indexOf('-') == 0) {
-						// - already exists or negative not enabled, prevent
-						event.preventDefault();
-					} else {
-						// prevent unless minus hit at beginning of field, check caret position
-						var input = $this.get(0);
-						if ('selectionStart' in input) {
-							if (input.selectionStart != 0) {
-								// not at beginning, prevent
-								event.preventDefault();
-							} else {
-								// allow minus, increase maxlength by 1 to accommodate
-								var max = $this.attr("maxlength");
-								$this.attr("maxlength", max+1);
-								return;
+					// if minus key pressed - disallow if value length > 0
+					if (event.keyCode == 109 || event.keyCode == 189) {
+						if (!negativeEnabled || value.indexOf('-') == 0) {
+							// - already exists or negative not enabled, prevent
+							event.preventDefault();
+						} else {
+							// prevent unless minus hit at beginning of field, check caret position
+							var input = $this.get(0);
+							if ('selectionStart' in input) {
+								if (input.selectionStart != 0) {
+									// not at beginning, prevent
+									event.preventDefault();
+								} else {
+									// allow minus, increase maxlength by 1 to accommodate
+									var max = $this.attr("maxlength");
+									$this.attr("maxlength", max+1);
+									return;
+								}
 							}
 						}
 					}
+				} else {
+					// ensure that it is a number and stop the keypress
+					if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+						event.preventDefault();
+					}
+					// if type="number"
+					if ($this.attr("type") == "number" && decimalUsed) {
+						if (value.length == $this.attr("maxlength")) {
+							event.preventDefault();
+						}
+					}
 				}
-			} else {
-				// ensure that it is a number and stop the keypress
-				if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
-					event.preventDefault();
+				
+				// period insert, only on period or a number key
+				value = $this.val();
+				if ((event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106) || event.keyCode == 110 || event.keyCode == 190) {
+					if (value.indexOf('.') == -1 && value.length >= (intLength+negative) && decimalLength != 0) {
+						value = value + ".";
+						$(this).val(value);
+					} 
 				}
-			}
 			
-			// period insert, only on period or a number key
-			value = $this.val();
-			if ((event.keyCode > 47 && event.keyCode < 58) || (event.keyCode > 95 && event.keyCode < 106) || event.keyCode == 110 || event.keyCode == 190) {
-				if (value.indexOf('.') == -1 && value.length >= (intLength+negative) && decimalLength != 0) {
-					value = value + ".";
-					$(this).val(value);
-				} 
-			}
-		
-			checkDecimal();
+				checkDecimal();
 		});
 
 		$this.keyup(function(event) {
