@@ -39,9 +39,11 @@ Great for currency --<br>
 Updates:
 ============
 <hr>
-10/21/14 - allowing up/down arrows & page up/down keys
+02/24/15 - added support for input type="number"
+
 02/06/15 - added support for negative values
-02/24/15 - added support for <input type="number">
+
+10/21/14 - allowing up/down arrows & page up/down keys
 
 To do:
 ============
