@@ -36,6 +36,13 @@ Great for currency --<br>
  -- has the effect of limiting fields to a maximum value of 99999.99.
 <hr>
 
+Updates:
+============
+<hr>
+10/21/14 - allowing up/down arrows & page up/down keys
+02/06/15 - added support for negative values
+02/24/15 - added support for <input type="number">
+
 To do:
 ============
 <hr>
