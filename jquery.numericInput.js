@@ -76,14 +76,16 @@
 						}
 					}
 				} else {
-					// ensure that it is a number and stop the keypress
-					if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
-						event.preventDefault();
-					}
-					// if type="number"
-					if ($this.attr("type") == "number" && decimalUsed) {
-						if (value.length == $this.attr("maxlength")) {
+					if (!event.ctrlKey) {
+						// ensure that it is a number and stop the keypress
+						if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
 							event.preventDefault();
+						}
+						// if type="number"
+						if ($this.attr("type") == "number" && decimalUsed) {
+							if (value.length == $this.attr("maxlength")) {
+								event.preventDefault();
+							}
 						}
 					}
 				}
@@ -99,7 +101,35 @@
 			
 				checkDecimal();
 		});
-
+			
+		// paste event - paste numbers up to limit (including decimals) - truncates if length is exceeded, skips non-numeric characters & multiple decimal points
+		$this.bind("paste", function(event){
+			event.preventDefault;
+			checkDecimal();
+			var p = event.originalEvent.clipboardData.getData('text');
+			for (var i = 0; i < p.length; i++) {
+				var char = p.charAt(i);
+				if ($.isNumeric(char)) {
+					if ($this.val().length < $this.attr("maxlength")) {
+						var newval = $this.val() + char;
+						$this.val(newval);
+						checkDecimal();
+					} else if ($this.val().length == $this.attr("maxlength")) {
+						return false;
+					}
+				} else if (char == ".") {
+					if (char == "." && $this.val().indexOf('.') == -1) {
+						var newval = $this.val() + char;
+						$this.val(newval);
+						checkDecimal();
+					} else if ($this.val().length == $this.attr("maxlength")) {
+						return false;
+					}
+				}
+			}
+			return false;
+		});
+		
 		$this.keyup(function(event) {
 			value = $this.val();
 			if (value.indexOf('.') == -1 && value.length > (intLength+negative)) {
