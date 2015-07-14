@@ -39,6 +39,8 @@ Great for currency --<br>
 Updates:
 ============
 <hr>
+07/14/15 - added paste capability, allowing ctrl+key (for copy/paste, select all, etc)
+
 02/24/15 - added support for input type="number"
 
 02/06/15 - added support for negative values
@@ -49,7 +51,6 @@ To do:
 ============
 <hr>
 -allow a leading zero for decimal values when intLength is zero<br>
--allow ctrl+a select all (shift+home/end does work though)<br>
 -check position and allow entering of additional digits if length rules allow
 	i.e if "55.55" is entered but field was set for .numeric(5,2) allow entering of 
 	three additional integer digits
