@@ -15,6 +15,7 @@
 // updated 10/21/14 - allowing up/down arrows & page up/down keys
 // updated 02/06/15 - allowing negative values
 // updated 02/24/15 - added support for <input type="number">
+// udpated 05/06/16 - properly unbinding paste & keyup events
 // ******************************************************************
 // todo
 // -check position and allow entering of additional digits if length rules allow
@@ -36,7 +37,6 @@
 	}
 
 	return this.each(function() {
-
 		var $this = $(this);
 		var decimalUsed;
 		var negative = 0;
@@ -103,8 +103,11 @@
 		});
 			
 		// paste event - paste numbers up to limit (including decimals) - truncates if length is exceeded, skips non-numeric characters & multiple decimal points
-		$this.bind("paste", function(event){
+		$this.unbind("paste").bind("paste", function(event) {
 			event.preventDefault;
+			console.info("pasting");
+			console.info($this);
+			console.info("###");
 			checkDecimal();
 			var p = event.originalEvent.clipboardData.getData('text');
 			for (var i = 0; i < p.length; i++) {
@@ -130,7 +133,7 @@
 			return false;
 		});
 		
-		$this.keyup(function(event) {
+		$this.unbind("keyup").keyup(function(event) {
 			value = $this.val();
 			if (value.indexOf('.') == -1 && value.length > (intLength+negative)) {
 				$(this).val(value.substr(0,value.length - (value.length-intLength-negative)));
